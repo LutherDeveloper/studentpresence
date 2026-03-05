@@ -1,0 +1,56 @@
+<h1>Student Login</h1>
+<input type="text" id="student_id" placeholder="Student ID">
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<script>
+async function login(){
+const student_id = document.getElementById("student_id").value;
+const password = document.getElementById("password").value;
+
+
+await fetch("/student/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({student_id,password})
+})
+.then(r=>r.json())
+.then(d=>{
+alert(d.message);
+if(d.message==="Student login success")
+window.location="student-dashboard.html";
+});
+}
+</script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+
+<video id="video" width="300" height="220" autoplay></video>
+<button onclick="startFaceLogin()">Login with Face</button>
+
+<script>
+async function startVideo(){
+const video = document.getElementById("video");
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>video.srcObject=stream);
+}
+
+async function startFaceLogin(){
+await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+const video = document.getElementById("video");
+
+const detection = await faceapi.detectSingleFace(
+video,
+new faceapi.TinyFaceDetectorOptions()
+);
+
+if(detection){
+alert("Face detected ✅ Login success");
+window.location="student-dashboard.html";
+}else{
+alert("Face not detected ❌");
+}
+}
+
+startVideo();
+</script>

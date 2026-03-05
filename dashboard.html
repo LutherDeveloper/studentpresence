@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<h1>Dashboard</h1>
+<canvas id="chart"></canvas>
+<br>
+<a href="/report"><button>Download PDF Report</button></a>
+</div>
+
+<script>
+async function loadChart(){
+const res = await fetch("/stats");
+const data = await res.json();
+
+const labels = data.map(d=>d.status);
+const totals = data.map(d=>d.total);
+
+new Chart(document.getElementById("chart"),{
+type:"bar",
+data:{
+labels:labels,
+datasets:[{
+label:"Attendance Count",
+data:totals
+}]
+}
+});
+}
+loadChart();
+</script>
+</body>
+</html>

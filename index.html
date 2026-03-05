@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Attendance Terminal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<h1>ATTENDANCE TERMINAL</h1>
+
+<input type="text" id="studentID" placeholder="Student ID">
+<input type="text" id="studentName" placeholder="Student Name">
+
+<button onclick="submitAttendance('Check In')">Check In</button>
+<button onclick="submitAttendance('Check Out')">Check Out</button>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<div id="reader" style="width:300px;margin:auto;"></div>
+
+<script>
+function onScanSuccess(decodedText){
+document.getElementById("studentID").value = decodedText;
+}
+new Html5QrcodeScanner("reader",{fps:10,qrbox:250})
+.render(onScanSuccess);
+</script>
+
+<button onclick="loadData()">Refresh</button>
+<a href="/export"><button>Download Excel</button></a>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Time</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="tableData"></tbody>
+</table>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

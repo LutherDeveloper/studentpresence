@@ -1,0 +1,55 @@
+<h1>Student Attendance</h1>
+
+<button onclick="absen('Check In')">Check In</button>
+<button onclick="absen('Check Out')">Check Out</button>
+
+<script>
+function checkLocation(callback){
+navigator.geolocation.getCurrentPosition(position=>{
+const lat = position.coords.latitude;
+const lon = position.coords.longitude;
+
+/* Ganti dengan koordinat kampus kamu */
+const campusLat = -2.990934;
+const campusLon = 104.756554;
+
+const distance = Math.sqrt(
+Math.pow(lat-campusLat,2) +
+Math.pow(lon-campusLon,2)
+);
+
+if(distance < 0.01){
+callback(true);
+}else{
+alert("You are outside campus area ❌");
+callback(false);
+}
+});
+}
+
+async function absen(status){
+checkLocation(async(valid)=>{
+if(!valid) return;
+
+await fetch("/attendance",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({status})
+})
+.then(r=>r.json())
+.then(d=>alert(d.message));
+});
+}
+</script>
+
+<script>
+async function absen(status){
+await fetch("/attendance",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({status})
+})
+.then(r=>r.json())
+.then(d=>alert(d.message));
+}
+</script>

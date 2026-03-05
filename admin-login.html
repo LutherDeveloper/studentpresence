@@ -1,0 +1,23 @@
+<h1>Admin Login</h1>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<script>
+async function login(){
+const username = document.getElementById("username").value;
+const password = document.getElementById("password").value;
+
+await fetch("/admin/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({username,password})
+})
+.then(r=>r.json())
+.then(d=>{
+alert(d.message);
+if(d.message==="Admin login success")
+window.location="dashboard.html";
+});
+}
+</script>
